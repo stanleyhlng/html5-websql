@@ -3,14 +3,45 @@
 <head>
 	<meta charset='utf-8'>
 	<title>stanleyhlng/html5-websql @ GitHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="assets/css/site.css" />
 </head>
 <body>
 
-	<div id="container">
+	<div class="container">
+
+		<h1>HTML5 WebSQL Demo</h1>
+		<button class="btn btn-primary" id="create-table">Create Table</button>
+		<button class="btn btn-primary" id="drop-table">Drop Table</button>
+		<button class="btn btn-primary" id="select-record">Select Record</button>
+		<button class="btn btn-primary" id="insert-record">Insert Record</button>
+		<button class="btn btn-primary" id="update-record">Update Record</button>
+		<button class="btn btn-primary" id="delete-record">Delete Record</button>
+
 	</div>
 
+	<script type="text/x-jquery-tmpl" id="sql-create-table-searchindex">
+		<div>
+CREATE TABLE IF NOT EXISTS searchindex (
+	id TEXT,
+	word TEXT,
+	freq INTEGER,
+	primary key (id)
+);
+		</div>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-drop-table-searchindex">
+DROP TABLE IF EXISTS searchindex;
+	</script>
+
 	<script type="text/javascript" src="assets/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.tmpl.min.js"></script>
+	<script type="text/javascript" src="assets/js/CRUD.js"></script>
+	<script type="text/javascript" src="assets/js/WebSQLHelper.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/site.js"></script>
 </body>
 </html>
