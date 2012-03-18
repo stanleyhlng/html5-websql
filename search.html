@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>stanleyhlng/html5-websql @ GitHub</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+	<style>
+#output {
+min-height:50px;
+background-color: #EEEEEE;
+border:1px solid #AAAAAA;
+}
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<h1>TheLadders.com | Client-Side Indexing and Searching</h1>
+		
+		<form class="well form-search" action="">
+			<input type="text" class="input-medium search-query" value="one" id="term" />
+			<button type="button" class="btn" id="search">Search</button>
+			<button type="button" class="btn" id="build">Build</button>
+			<button type="button" class="btn" id="clear">Clear</button>
+			<button type="button" class="btn" id="save">Save</button>
+			<button type="button" class="btn" id="load">Load</button>
+			<button type="button" class="btn" id="dump">Dump</button>
+		</form>
+		
+		<div id="output" />
+	</div>
+	<script type="text/x-jquery-tmpl" id="sql-index-headchar-create-table">
+		<code>
+CREATE TABLE IF NOT EXISTS headchar (
+	headchar TEXT NOT NULL,
+	primary key (headchar)
+);
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-index-headchar-replace-record">
+		<code>
+REPLACE INTO headchar (headchar) VALUES (?);
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-index-headchar-search-record">
+		<code>
+SELECT * FROM headchar LIMIT 100;
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-index-searchindex-create-table">
+		<code>
+CREATE TABLE IF NOT EXISTS searchindex (
+	headchar TEXT NOT NULL,
+	word TEXT NOT NULL,
+	meta TEXT NOT NULL,
+	primary key (headchar, word)
+);
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-index-searchindex-replace-record">
+		<code>
+REPLACE INTO searchindex (headchar, word, meta) VALUES (?, ?, ?);
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-index-searchindex-search-record">
+		<code>
+SELECT * FROM searchindex WHERE headchar=?;
+		</code>
+	</script>
+	<script type="text/javascript" src="assets/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="assets/js/jquery.tmpl.min.js"></script>
+	<script type="text/javascript" src="assets/js/WebSQLHelper.js"></script>
+	<script type="text/javascript" src="assets/js/utils.js"></script>
+	<script type="text/javascript" src="assets/js/search.js"></script>
+	<script type="text/javascript" src="assets/js/fbsearch.js"></script>
+	<script type="text/javascript">
+(function() {
+	var idx;
+	
+	var build = function() {
+		console.log("build");
+
+		// Create an search-index
+		if (idx === undefined) {
+			//idx = new LADDERS.search.index();
+			idx = FBSearchIndex.createInstance({});
+		}
+
+		// Create a search-document
+		var doc = new LADDERS.search.document();
+		doc.add("id", 1);
+		doc.add("text", "one two three one");
+		idx.addDocument(doc);
+
+		var doc = new LADDERS.search.document();
+		doc.add("id", 2);
+		doc.add("text", "four five six");
+		doc.add("moretext", "one ten");
+		idx.addDocument(doc);
+	}
+
+	var save = function() {
+		console.log("save");
+		if (idx !== undefined) {
+			idx.saveIndex();
+		}
+	}
+
+	var load = function() {
+		console.log("load");
+		if (idx !== undefined) {
+			idx.loadIndex();
+		}
+	}
+	
+	var dump = function() {
+		console.log("dump");
+		if (idx !== undefined) {
+			idx.dumpIndex();
+		}
+	}
+
+	var clear = function() {
+		console.log("clear");
+		if (idx !== undefined) {
+			idx.clearIndex();
+		}
+	}
+	
+	var search = function() {
+		console.log("search");
+
+		var searchTerm = $("#term").val();
+		var searchResults = idx.search(searchTerm);
+		console.log(searchResults);
+		$("#output").html(searchResults.toString());
+	}
+
+	$(document).ready(function() {
+		//var config = {};
+		//fbsearch = FBSearch.createInstance(config);
+		
+		$("#load").click(load);
+		$("#save").click(save);
+		$("#dump").click(dump);
+		$("#build").click(build);
+		$("#clear").click(clear);
+		$("#search").click(search);
+
+	});
+}())
+	</script>
+</body>
+</html>

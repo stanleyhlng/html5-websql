@@ -26,17 +26,21 @@ var WebSQLHelper = (function($) {
 	}
 
 	WebSQLHelper.onError = function(e) {
-		console.log(TAG, e);
+		console.log(TAG, "on-error", e);
 	}
 
 	WebSQLHelper.onSuccess = function(tx, response) {
-		console.log(TAG, response);
+		console.log(TAG, "on-success", response);
 	}
 
-	WebSQLHelper.onCreate = function(tx, response) {
-		console.log(TAG, response);
+	WebSQLHelper.onCreate = function() {
+		console.log(TAG, "on-create");
 	}
-
+	
+	WebSQLHelper.onReady = function() {
+		//console.log(TAG, "on-ready");
+	}
+	
 	WebSQLHelper.prototype.init = function(config) {
 		console.log(TAG, "init");
 		
@@ -47,34 +51,56 @@ var WebSQLHelper = (function($) {
 			params.desciption	= config.description || "The description of WebSQL db";
 			params.size			= config.size || (5 * 1024 * 1024);
 			params.callback		= config.callback || WebSQLHelper.onCreate;
-			console.log(params);
+			//console.log(params);
 
 			db = openDatabase(params.name, params.version, params.description, params.size, params.callback);
+			if (!db) {
+				console.log(TAG, "Fail to open database!");
+				}
 		}
 	}
 
-	WebSQLHelper.prototype.execute = function(sql) {
-		console.log(TAG, "execute");
+	WebSQLHelper.prototype.execute = function(sql, values, callback) {
+		console.log(TAG, "execute", sql);
+		
+		values = values || [];
+		console.log(TAG, "execute", values);
+
+		callback = callback || undefined;
+		
 		db.transaction(function(tx) {
-			tx.executeSql(sql);
-		});
+			tx.executeSql(sql, values, function(tx, results) {
+				if (callback) {
+					callback(results);
+				}
+			},
+			WebSQLHelper.onError);
+		},
+		WebSQLHelper.onError,
+		WebSQLHelper.onReady);
 	}
 	
-	WebSQLHelper.prototype.query = function(sql) {
-	}
+	WebSQLHelper.prototype.query = function(sql, values, callback) {
+		console.log(TAG, "query", sql);
 
-	WebSQLHelper.prototype.select = function() {
-	}
+		values = values || [];
+		console.log(TAG, "query", values);
 
-	WebSQLHelper.prototype.insert = function() {
-	}
-
-	WebSQLHelper.prototype.update = function() {
-	}
-
-	WebSQLHelper.prototype.delete = function(table, where, using, vars, _test) {
+		callback = callback || undefined;
 		
+		db.readTransaction(function(tx) {
+			tx.executeSql(sql, values, function(tx, results) {
+				if (callback) {
+					console.log(TAG, "query", values, "count", results.rows.length);
+					callback(results);
+				}
+			},
+			WebSQLHelper.onError);
+		},
+		WebSQLHelper.onError,
+		WebSQLHelper.onReady);
 	}
 
 	return WebSQLHelper;
+	
 }(jQuery));

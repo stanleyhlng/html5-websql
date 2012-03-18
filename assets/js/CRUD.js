@@ -20,8 +20,8 @@ var CRUD = (function($) {
 
 				if (!db) {
 					db = WebSQLHelper.createInstance({
-						"name": "search_index",
-						"description" : "This is Search Index Database."
+						"name"			: "searchindex",
+						"description"	: "This is Search Index Database."
 						});
 				}
 
@@ -41,6 +41,10 @@ var CRUD = (function($) {
 		return instance;
 	}
 
+	CRUD.prototype.getDB = function() {
+		return db;
+	}
+	
 	CRUD.prototype.init = function() {
 		console.log(TAG, "init");
 	}
@@ -65,11 +69,9 @@ var CRUD = (function($) {
 	}
 	
 	var testSingleton = function() {
-		console.log(TAG, "testSingleton");
-		
 		var db1 = WebSQLHelper.getInstance();
 		var db2 = WebSQLHelper.getInstance();
-		console.log(db1 == db2);
+		console.log(TAG, "testSingleton", db1 == db2);
 	}
 		
 	return CRUD;
@@ -78,4 +80,5 @@ var CRUD = (function($) {
 
 /*
 http://webpy.org/src/blog/0.3
+http://www.tutorialspoint.com/html5/html5_web_sql.htm
 */

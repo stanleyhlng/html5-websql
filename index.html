@@ -20,28 +20,56 @@
 		<button class="btn btn-primary" id="insert-record">Insert Record</button>
 		<button class="btn btn-primary" id="update-record">Update Record</button>
 		<button class="btn btn-primary" id="delete-record">Delete Record</button>
+		<button class="btn btn-primary" id="search-record">Search Record</button>
 
 	</div>
 
-	<script type="text/x-jquery-tmpl" id="sql-create-table-searchindex">
-		<div>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-create-table">
+		<code>
 CREATE TABLE IF NOT EXISTS searchindex (
 	id TEXT,
 	word TEXT,
 	freq INTEGER,
 	primary key (id)
 );
-		</div>
+		</code>
 	</script>
-	<script type="text/x-jquery-tmpl" id="sql-drop-table-searchindex">
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-drop-table">
+		<code>
 DROP TABLE IF EXISTS searchindex;
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-insert-record">
+		<code>
+INSERT INTO searchindex (id, word, freq) VALUES ("stanleyn", "Stanley Ng", 1);
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-select-record">
+		<code>
+SELECT * FROM searchindex WHERE id="stanleyn";
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-update-record">
+		<code>
+UPDATE searchindex SET word="Ng Ho Lun" WHERE id="stanleyn";
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-delete-record">
+		<code>
+DELETE FROM searchindex WHERE id="stanleyn"
+		</code>
+	</script>
+	<script type="text/x-jquery-tmpl" id="sql-searchindex-search-record">
+		<code>
+SELECT * FROM searchindex;
+		</code>
 	</script>
 
 	<script type="text/javascript" src="assets/js/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="assets/js/jquery.tmpl.min.js"></script>
+	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/CRUD.js"></script>
 	<script type="text/javascript" src="assets/js/WebSQLHelper.js"></script>
-	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/site.js"></script>
 </body>
 </html>
