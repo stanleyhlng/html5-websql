@@ -62,13 +62,14 @@ var WebSQLHelper = (function($) {
 
 	WebSQLHelper.prototype.execute = function(sql, values, callback) {
 		console.log(TAG, "execute", sql);
-		
+
 		values = values || [];
 		console.log(TAG, "execute", values);
 
 		callback = callback || undefined;
 		
 		db.transaction(function(tx) {
+
 			tx.executeSql(sql, values, function(tx, results) {
 				if (callback) {
 					callback(results);

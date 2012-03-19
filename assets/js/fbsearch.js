@@ -59,8 +59,13 @@ var FBSearchIndex = (function($) {
 				
 		var self = this;
 		var sql = "";
+		var timer = new Timer();
 		var idx = {};
+
 		if (db) {
+
+			timer.start();
+
 			self._index = {};
 			
 			sql = $("#sql-index-headchar-search-record").tmpl({}).html();
@@ -87,6 +92,9 @@ var FBSearchIndex = (function($) {
 
 				//console.log(TAG, "idx", idx);
 				self._index = idx;
+
+				timer.stop();
+				console.log(TAG, "elapsed time", timer.elapsed() + " seconds");
 			});
 		}
 	});
@@ -95,7 +103,12 @@ var FBSearchIndex = (function($) {
 		console.log(TAG, "save_index");
 		var self = this;
 		var sql = "";
+		var timer = new Timer();
+
 		if (db) {
+
+			timer.start();
+
 			// create "headchar" table
 			sql = $("#sql-index-headchar-create-table").tmpl({}).html();
 			db.execute(sql, [], function(results) {
@@ -121,6 +134,9 @@ var FBSearchIndex = (function($) {
 						db.execute(sql, [i, j, JSON.stringify(self._index[i][j])]);
 					}
 				}
+				
+				timer.stop();
+				console.log(TAG, "elapsed time", timer.elapsed() + " seconds");
 			});
 		}
 	});
@@ -129,22 +145,10 @@ var FBSearchIndex = (function($) {
 		console.log(TAG, "dump_index");
 		console.log(this._index);
 	});
-	
-	FBSearchIndex.method("_getIndexHeadCharList", function(index) {
-		var chars = [];
-		for (var key in index) {
-			chars.push(key);
-		}
-		return chars;
-	});
 
 	FBSearchIndex.method('clearIndex', function() {
 		console.log(TAG, "clear_index");
 		this._index = {};
-	});
-
-	FBSearchIndex.method('toString', function() {
-		console.log(TAG, "to_string");
 	});
 
 	return FBSearchIndex;
