@@ -85,22 +85,28 @@ SELECT * FROM searchindex WHERE headchar=?;
 		console.log("build");
 
 		// Create an search-index
+		/*
 		if (idx === undefined) {
 			//idx = new LADDERS.search.index();
 			idx = FBSearchIndex.createInstance({});
 		}
+		*/
 
-		// Create a search-document
-		var doc = new LADDERS.search.document();
-		doc.add("id", 1);
-		doc.add("text", "one two three one");
-		idx.addDocument(doc);
+		if (idx !== undefined) {
 
-		var doc = new LADDERS.search.document();
-		doc.add("id", 2);
-		doc.add("text", "four five six");
-		doc.add("moretext", "one ten");
-		idx.addDocument(doc);
+			// Create a search-document
+			var doc = new LADDERS.search.document();
+			doc.add("id", 1);
+			doc.add("text", "one two three one");
+			idx.addDocument(doc);
+	
+			var doc = new LADDERS.search.document();
+			doc.add("id", 2);
+			doc.add("text", "four five six");
+			doc.add("moretext", "one ten");
+			idx.addDocument(doc);
+
+		}
 	}
 
 	var save = function() {
@@ -141,9 +147,11 @@ SELECT * FROM searchindex WHERE headchar=?;
 	}
 
 	$(document).ready(function() {
-		//var config = {};
-		//fbsearch = FBSearch.createInstance(config);
-		
+
+		if (idx === undefined) {
+			idx = FBSearchIndex.createInstance({});
+		}
+
 		$("#load").click(load);
 		$("#save").click(save);
 		$("#dump").click(dump);
